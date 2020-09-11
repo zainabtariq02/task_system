@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TaskManagementSystem</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-dark bg-dark">
+
+      <a class="navbar-brand" href="/">Task Management System</a>
+    
+        <% if current_user %>
+          <% if current_user.admin %>
+     
+            <a href= <%= users_path %> >Users</a>
+            <a href= <%= tasks_path %> >Tasks</a>
+      
+          <% else %>
+            
+             <a href=<%= tasks_path %>>Tasks</a>
+        
+          <% end %> 
+         
+         <form class="form-inline">
+           <a  href="#"> <%= get_user_role(current_user) %>: <%= current_user.name %> </a>
+           <%=link_to 'Sign out', destroy_user_session_path, :method => :delete %>             
+        </form>
+
+        <% else %>
+
+          <form class="form-inline">
+            <a class="btn btn-outline-primary" href=<%=new_user_session_path%> role="button">Sign in</a> 
+            <a class="btn btn-outline-success" href=<%=new_user_registration_path%> role="button">
+             Sign Up
+            </a>
+          </form>
+
+        <% end %>  
+
+        
+    </nav>
+
+    <main class='<%= controller.controller_name %>'>
+    <div class="container"> <%= render 'layouts/alerts' %> </div>
+      <%= yield %>
+    </main>
+  
+  </body>
+</html>
