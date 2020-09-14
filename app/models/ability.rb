@@ -11,12 +11,10 @@ class Ability
       can :manage, :all
     else
 
-      can :read, Task, ['assignee_user_id = (?)
-                        OR reviewer_user_id = (?)
-                        OR created_by_user_id = (?)', user.id, user.id, user.id] do |task|
-        task.assignee_user_id == user.id || task.reviewer_user_id == user.id || task.created_by_user_id == user.id
+      can :index, Task, ['assignee_user_id = (?) OR reviewer_user_id = (?) OR created_by_user_id = (?)', user.id, user.id, user.id] do |task|
+ 
       end
-
+      can :show, Task, assignee_user_id: user.id, reviewer_user_id: user.id, created_by_user_id: user.id
       can :create, Task
       can :destroy, Task, created_by_user_id: user.id
       can :update, Task, assignee_user_id: user.id

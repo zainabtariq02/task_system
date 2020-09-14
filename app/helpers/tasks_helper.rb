@@ -19,4 +19,14 @@ module TasksHelper
       complete_task_path
     end
   end
+
+  def get_status(task)
+    if task.open?
+      'Open'
+    elsif task.in_progress?
+      'In Progress'
+    else
+      'Complete'
+    end
+  end
 end

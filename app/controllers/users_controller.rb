@@ -38,10 +38,9 @@ class UsersController < ApplicationController
     @user.admin = false
     @user.skip_password_validation = true
     @user.skip_confirmation!
-    
+
     respond_to do |format|
       if @user.save
-        UserMailer.delay.welcome_reset_password_instructions(@user)
         format.html { redirect_to @user, notice: 'User is successfully created.' }
       else
         format.html { render :new }

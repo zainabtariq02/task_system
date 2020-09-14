@@ -4,8 +4,9 @@
 class User < ApplicationRecord
   validates :name, presence: true
   before_destroy :can_destroy?, prepend: true
-  
-  attr_accessor :skip_password_validation
+  after_create :send_welcome_reset_email
+
+  attr_accessor :skip_password_validation, :email_send_status
 
   has_many :tasks_as_assignee, class_name: 'Task', foreign_key: 'assignee_user_id'
   has_many :tasks_as_reviewer, class_name: 'Task', foreign_key: 'reviewer_user_id'
@@ -23,6 +24,10 @@ class User < ApplicationRecord
   end
 
   private
+  
+  def send_welcome_reset_email
+    UserMailer.delay.welcome_reset_password_instructions(self)
+  end
 
   def can_destroy?
     return true if tasks_as_assignee.empty? && tasks_as_reviewer.empty? && tasks_created.empty?

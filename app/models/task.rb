@@ -9,7 +9,9 @@ class Task < ApplicationRecord
   belongs_to :assignee_user, class_name: 'User'
   belongs_to :reviewer_user, class_name: 'User'
   belongs_to :created_by_user, class_name: 'User'
-
+  
+  scope :with_status, ->(status) { where(state: status) }
+  
   state_machine initial: :open do
     state :open
     state :in_progress

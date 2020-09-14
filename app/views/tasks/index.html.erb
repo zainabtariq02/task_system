@@ -7,8 +7,13 @@
 
 </div>
 <div class="container">
-  <table class="table table-striped">
+  <%= form_for "", url: tasks_path, role: "search", method: :get do %>
+    <%= select_tag :search,  options_for_select(Task.available_states), {:include_blank => 'All'} %>
+    <%= submit_tag 'Filter' %>
+  <% end %>
 
+  <table class="table table-striped">
+ 
     <thead>
       <tr>
         <th>Title</th>
@@ -29,16 +34,15 @@
           <td><%= task.assignee_user.name %></td>
           <td><%= task.reviewer_user.name %></td>
           <td><%= task.created_by_user.name %></td>
-          <td><%= task.state %></td>
+          <td><%= get_status(task) %></td>
           <td><%= link_to 'Show', task %></td>
           <td><%if can? :update, task %><%= link_to 'Edit', edit_task_path(task) %><%end%></td>
           <td><%if can? :destroy, task %><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %><%end%></td>
         </tr>
-      <% end %>
-      <%= will_paginate @tasks, renderer: BootstrapPagination::Rails%>
+      <% end %>   
     </tbody>
   </table>
-
+  <%= will_paginate @tasks, renderer: BootstrapPagination::Rails%>
   <br>
 
   <%= link_to 'New Task', new_task_path %>
