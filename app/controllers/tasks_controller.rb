@@ -10,7 +10,7 @@ class TasksController < ApplicationController
     @tasks = if params[:search].blank?
                @tasks.paginate(page: params[:page], per_page: 6)
              else
-               Task.with_status(params[:search]).paginate(page: params[:page], per_page: 6)
+               @tasks.with_status(params[:search]).paginate(page: params[:page], per_page: 6)
              end
 
     respond_to do |format|
